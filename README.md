@@ -1,47 +1,43 @@
 # Voice Ordering System for Restaurants
 
-An AI-assisted restaurant ordering system built for a Swedish/Nordic fast-food style workflow. Customers can order through a phone-like voice screen or text chat, while staff can manage incoming orders from a simple kitchen dashboard.
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=111)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=fff)](https://vitejs.dev/)
+[![Node.js](https://img.shields.io/badge/Node.js-Express-339933?logo=node.js&logoColor=fff)](https://nodejs.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?logo=tailwindcss&logoColor=fff)](https://tailwindcss.com/)
+[![AI](https://img.shields.io/badge/AI-GitHub%20Models-24292F?logo=github&logoColor=fff)](https://github.com/marketplace/models)
 
-The demo data is currently based on JAFS Gressvik, but the menu, restaurant details, prompts, and branding can be adapted for any restaurant, takeaway, cafe, or AI agent ordering use case.
+An AI-powered restaurant ordering system with a phone-style voice interface, text chat ordering, searchable menu, printable receipt, and a simple kitchen dashboard for staff.
+
+The demo is currently configured for JAFS Gressvik, but the menu, assistant prompt, branding, and restaurant details can be adapted for any restaurant, takeaway, cafe, or custom AI ordering agent.
 
 ![Voice call module](./docs/call-module.png)
 
-## What It Does
+## Highlights
 
-- Lets customers place orders through a voice-call style interface.
-- Supports text chat ordering with quick action buttons.
-- Uses AI to understand menu questions, item choices, sizes, confirmations, and simple follow-up questions.
-- Creates digital orders with totals, customer/session context, and conversation transcripts.
-- Shows a staff dashboard with order stages: new, preparing, ready, and completed.
-- Generates a receipt modal that can be printed after an order is confirmed.
-- Provides fallback local responses when the AI token is not configured, so the demo can still run.
+| Area | What it includes |
+| --- | --- |
+| Customer ordering | Voice-call interface, text chat, quick actions, order summary |
+| AI assistant | Menu understanding, follow-up questions, order confirmation, fallback responses |
+| Restaurant menu | Searchable menu categories, prices, sizes, add-ons, opening hours |
+| Staff dashboard | New, preparing, ready, and completed order stages |
+| Receipts | Digital receipt modal with print support |
+| Local demo | Runs without production infrastructure using in-memory storage |
 
 ## Main Screens
 
-- `Chat` - customer text ordering with suggested actions and an order summary.
-- `Call` - phone-style voice ordering using browser speech recognition and text-to-speech.
+- `Chat` - text-based ordering with suggested actions and live order summary.
+- `Call` - phone-style voice ordering using speech recognition and text-to-speech.
 - `Menu` - searchable restaurant menu grouped by category.
-- `Admin` - kitchen/order dashboard for changing order status.
+- `Admin` - staff dashboard for tracking and updating order status.
 
 ## Tech Stack
 
-Frontend:
-
-- React 18
-- Vite
-- Tailwind CSS
-- React Router
-- Lucide React icons
-- Web Speech API for speech recognition
-- ElevenLabs text-to-speech, with browser speech synthesis fallback
-
-Backend:
-
-- Node.js
-- Express.js
-- GitHub Models through Azure AI Inference SDK
-- In-memory order and transcript storage for local demo mode
-- Optional MongoDB connection placeholder for production persistence
+| Layer | Tools |
+| --- | --- |
+| Frontend | React 18, Vite, Tailwind CSS, React Router, Lucide React |
+| Voice | Web Speech API, ElevenLabs text-to-speech, browser speech fallback |
+| Backend | Node.js, Express.js, GitHub Models, Azure AI Inference SDK |
+| Storage | In-memory demo storage, optional MongoDB connection placeholder |
 
 ## Project Structure
 
@@ -82,27 +78,27 @@ Backend:
 +-- README.md
 ```
 
-## Setup
+## Getting Started
 
 Requirements:
 
 - Node.js 18 or newer
 - npm
-- Chrome or Edge for the best voice-recognition support
+- Chrome or Edge for the best browser speech-recognition support
 
-Install everything from the root folder:
+Install dependencies:
 
 ```bash
 npm run install:all
 ```
 
-Or on Windows:
+Windows shortcut:
 
 ```bat
 INSTALL.bat
 ```
 
-## Environment Variables
+## Environment Setup
 
 Create `backend/.env` from `backend/.env.example`:
 
@@ -123,9 +119,9 @@ VITE_ELEVENLABS_API_KEY=your_elevenlabs_api_key
 Notes:
 
 - `GITHUB_TOKEN` enables the best AI conversation behavior.
-- If `GITHUB_TOKEN` is missing, the backend uses local fallback responses.
-- If `VITE_ELEVENLABS_API_KEY` is missing, the voice module falls back to browser speech synthesis.
-- Do not commit real `.env` or `.env.local` files.
+- Without `GITHUB_TOKEN`, the backend uses local fallback responses.
+- Without `VITE_ELEVENLABS_API_KEY`, the voice module falls back to browser speech synthesis.
+- Real `.env` and `.env.local` files should stay private and are ignored by git.
 
 ## Run Locally
 
@@ -135,7 +131,7 @@ Start both apps together:
 npm run dev
 ```
 
-Or start them in separate terminals:
+Or run them separately:
 
 ```bash
 cd backend
@@ -149,30 +145,48 @@ npm run dev
 
 Local URLs:
 
-- Frontend: `http://localhost:5173`
-- Voice call module: `http://localhost:5173/call`
-- Menu: `http://localhost:5173/menu`
-- Admin dashboard: `http://localhost:5173/admin`
-- Backend health check: `http://localhost:3001/api/health`
+| Page | URL |
+| --- | --- |
+| Frontend | `http://localhost:5173` |
+| Voice call module | `http://localhost:5173/call` |
+| Menu | `http://localhost:5173/menu` |
+| Admin dashboard | `http://localhost:5173/admin` |
+| Backend health check | `http://localhost:3001/api/health` |
+
+## Demo Flow
+
+1. Open `http://localhost:5173/call`.
+2. Click the phone button.
+3. Say something like `I want a large pizza`.
+4. Let the assistant ask for missing details.
+5. Confirm the order.
+6. Review the generated receipt.
+7. Open `http://localhost:5173/admin` to move the order through preparation stages.
 
 ## API Overview
 
+Chat:
+
 ```http
-POST /api/chat
-POST /api/chat/greeting
-GET  /api/chat/:sessionId/transcript
+POST   /api/chat
+POST   /api/chat/greeting
+GET    /api/chat/:sessionId/transcript
 DELETE /api/chat/:sessionId
 ```
 
+Menu:
+
 ```http
-GET  /api/menu
-GET  /api/menu/categories
-GET  /api/menu/category/:categoryId
-GET  /api/menu/item/:itemId
-GET  /api/menu/search?q=pizza
-GET  /api/menu/items
-GET  /api/menu/info
+GET /api/menu
+GET /api/menu/categories
+GET /api/menu/category/:categoryId
+GET /api/menu/item/:itemId
+GET /api/menu/search?q=pizza
+GET /api/menu/items
+GET /api/menu/info
 ```
+
+Orders:
 
 ```http
 POST   /api/orders
@@ -185,54 +199,34 @@ PATCH  /api/orders/:orderId/status
 DELETE /api/orders/:orderId
 ```
 
+Transcripts:
+
 ```http
 GET /api/transcripts
 GET /api/transcripts/:sessionId
 ```
 
-## Demo Flow
+## Customization
 
-1. Open `http://localhost:5173/call`.
-2. Click the phone button.
-3. Say something like: `I want a large pizza`.
-4. Let the assistant ask for missing details.
-5. Confirm the order.
-6. The app creates the order and shows a receipt.
-7. Open `http://localhost:5173/admin` to move the order through preparation stages.
+To adapt this for another restaurant:
 
-## Customizing for Another Restaurant
-
-Update these areas:
-
-- `backend/data/menu.js` for menu categories, prices, opening hours, and restaurant details.
-- `backend/services/aiService.js` for assistant name, tone, order rules, and language.
-- `frontend/src/App.jsx` and page components for branding text.
-- `frontend/src/index.css` for colors and visual style.
+- Update `backend/data/menu.js` with categories, prices, hours, and restaurant details.
+- Update `backend/services/aiService.js` for assistant name, language, tone, and ordering rules.
+- Update `frontend/src/App.jsx` and page components for branding.
+- Update `frontend/src/index.css` for the visual theme.
 
 ## Current Limitations
 
-- Orders and transcripts are stored in memory unless persistence is implemented.
+- Orders and transcripts use in-memory storage unless persistence is implemented.
 - Voice recognition depends on browser support and microphone permissions.
-- Some source text from the original menu import has character-encoding artifacts that should be cleaned before production use.
-- The current demo is optimized for local development, not hosted production.
+- Some original menu text contains character-encoding artifacts that should be cleaned before production use.
+- The current setup is optimized for local development, not hosted production.
 
 ## Contact
 
 Need help with this project, a similar restaurant automation system, or a custom AI agent?
 
-- Phone/WhatsApp: `+92 309 5501847`
-- Email: `chumarhassan999@gmail.com`
-
-## Suggested Repository Details
-
-Repository name:
-
-```text
-restaurant-voice-ordering-system
-```
-
-Short description:
-
-```text
-AI-powered voice and chat ordering system for restaurants with React, Node.js, GitHub Models, ElevenLabs, and an admin order dashboard.
-```
+| Contact | Details |
+| --- | --- |
+| Phone / WhatsApp | `+92 309 5501847` |
+| Email | `chumarhassan999@gmail.com` |
